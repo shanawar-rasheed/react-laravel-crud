@@ -61,7 +61,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        return response()->json(User::whereId($id)->first());
     }
 
     /**
@@ -73,7 +73,12 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::whereId($id)->first();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+        return response()->json("User Updated Successfully");
     }
 
     /**
@@ -84,6 +89,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::whereId($id)->first()->delete();
+        return response()->json("User Successfully Deleted");
     }
 }

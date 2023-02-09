@@ -1,5 +1,6 @@
 import http from "../http";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 export default function Home() {
   const [users, setUsers] = useState([]);
 
@@ -12,10 +13,17 @@ export default function Home() {
       setUsers(res.data);
     });
   };
+
+  const deleteUser = (id) => {
+    http.delete("/users/" + id).then((res) => {
+      fetchAllUsers();
+    });
+  };
+
   return (
     <div>
       <h2>User Listing</h2>
-      <div >
+      <div>
         <table className="table">
           <thead>
             <tr>
@@ -31,7 +39,30 @@ export default function Home() {
                 <td>{user.id}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>edit</td>
+                <td>
+                  <Link
+                    to={{ pathname: "/edit/" + user.id }}
+                    className="btn btn-primary"
+                  >
+                    Edit
+                  </Link>
+                  &nbsp;
+                  <Link
+                    to={{ pathname: "/view/" + user.id }}
+                    className="btn btn-success"
+                  >
+                    View
+                  </Link>
+                  &nbsp;
+                  <button
+                    onClick={() => {
+                      deleteUser(user.id);
+                    }}
+                    className="btn btn-danger"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
